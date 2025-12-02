@@ -23,7 +23,7 @@ class Model:
         :return: lista dei rifugi presenti nel grafo.
         """
         self.lista_nodi = DAO.getRifugi()
-        self.G.add_nodes_from(self.lista_nodi)
+        self.G.add_nodes_from(self.lista_nodi)  #attenzione a capire cosa fa
         print(self.G.nodes)
 
 

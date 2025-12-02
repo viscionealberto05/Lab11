@@ -12,6 +12,8 @@ class Rifugio:
     def __str__(self):
         return f"Rifugio: {self.id}, {self.nome}, {self.localita}, {self.altitudine}, {self.capienza}, {self.aperto}"
 
+    def __eq__(self, other):
+        return self.id == other.id
 
 
     def __hash__(self):
