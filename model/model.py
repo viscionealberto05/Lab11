@@ -13,14 +13,19 @@ class Model:
         Quindi il grafo avrà solo i nodi che appartengono almeno ad una connessione, non tutti quelli disponibili.
         :param year: anno limite fino al quale selezionare le connessioni da includere.
         """
-        # TODO
+        self.lista_sentieri = DAO.getSentieri(year)
+        for sentiero in self.lista_sentieri:
+            self.G.add_edge(sentiero.id_rifugio1, sentiero.id_rifugio2)
 
     def get_nodes(self):
         """
         Restituisce la lista dei rifugi presenti nel grafo.
         :return: lista dei rifugi presenti nel grafo.
         """
-        # TODO
+        self.lista_nodi = DAO.getRifugi()
+        self.G.add_nodes_from(self.lista_nodi)
+        print(self.G.nodes)
+
 
     def get_num_neighbors(self, node):
         """
@@ -29,6 +34,19 @@ class Model:
         :return: numero di vicini diretti del nodo indicato
         """
         # TODO
+
+        nodi_vicini = []
+
+        for edge in self.G.edges(node):
+            print(edge[1])
+            for nodo in self.G.nodes:
+                print(nodo)
+                if nodo == edge[1]:
+                    nodi_vicini.append(nodo)
+
+        for element in nodi_vicini:
+            print(element)
+
 
     def get_num_connected_components(self):
         """
