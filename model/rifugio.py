@@ -13,7 +13,7 @@ class Rifugio:
         return f"Rifugio: {self.id}, {self.nome}, {self.localita}, {self.altitudine}, {self.capienza}, {self.aperto}"
 
     def __eq__(self, other):
-        return self.id == other.id
+        return self.id == other
 
 
     def __hash__(self):

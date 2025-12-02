@@ -38,10 +38,10 @@ class Model:
         nodi_vicini = []
 
         for edge in self.G.edges(node):
-            print(edge[1])
+            #print(edge[1])
             for nodo in self.G.nodes:
-                print(nodo)
-                if nodo == edge[1]:
+                #print(nodo)
+                if nodo.id == edge[1]:
                     nodi_vicini.append(nodo)
 
         for element in nodi_vicini:
