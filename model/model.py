@@ -13,6 +13,15 @@ class Model:
         Quindi il grafo avrà solo i nodi che appartengono almeno ad una connessione, non tutti quelli disponibili.
         :param year: anno limite fino al quale selezionare le connessioni da includere.
         """
+
+        self.lista_nodi = DAO.getRifugi()
+        print(self.lista_nodi)
+
+        self.G.add_nodes_from(self.lista_nodi)  # attenzione a capire cosa fa
+        for node in self.G.nodes:
+            print(node)
+
+
         self.lista_sentieri = DAO.getSentieri(year)
         for sentiero in self.lista_sentieri:
             self.G.add_edge(sentiero.id_rifugio1, sentiero.id_rifugio2)
@@ -22,9 +31,8 @@ class Model:
         Restituisce la lista dei rifugi presenti nel grafo.
         :return: lista dei rifugi presenti nel grafo.
         """
-        self.lista_nodi = DAO.getRifugi()
-        self.G.add_nodes_from(self.lista_nodi)  #attenzione a capire cosa fa
-        print(self.G.nodes)
+
+        return self.G.nodes
 
 
     def get_num_neighbors(self, node):
@@ -37,15 +45,51 @@ class Model:
 
         nodi_vicini = []
 
+        #assegno al nodo dato in input dall'utente come intero un effettivo oggetto rifugio, che è un nodo
+        """for oggetto_nodo in self.G.nodes:
+            if oggetto_nodo.id == node:
+                node = oggetto_nodo
+                break
+
         for edge in self.G.edges(node):
             #print(edge[1])
+
+            #assegno al potenziale nodo vicino che sto cercando (cioè edge[1]) un effettivo oggetto rifugio
+            #cosi da poi poter effettuare il controllo sfruttando la sintassi corretta del metodo __eq__ di rifugio
+            for oggetto_nodo in self.G.nodes:
+                if oggetto_nodo.id == edge[1]:
+                    potenziale_nodo_vicino = oggetto_nodo
+                    break
+
+
             for nodo in self.G.nodes:
                 #print(nodo)
-                if nodo.id == edge[1]:
-                    nodi_vicini.append(nodo)
+                #print(edge)
+                #if nodo.id == edge[1].id:
+                if nodo.id == potenziale_nodo_vicino:
+                    nodi_vicini.append(potenziale_nodo_vicino)
 
         for element in nodi_vicini:
             print(element)
+
+        return len(nodi_vicini)"""
+
+
+        for edge in self.G.edges(node):
+            for nodo in self.G.nodes:
+
+                for nodo_pot in self.G.nodes:
+                    # print(nodo)
+                    # print(edge)
+                    # if nodo.id == edge[1].id:
+                    if nodo_pot.id == edge[1]:
+                        nodo_vicino = nodo_pot
+                        break
+
+                if nodo.id == nodo_vicino:
+                    nodi_vicini.append(nodo)
+
+        return len(nodi_vicini)
 
 
     def get_num_connected_components(self):
@@ -54,6 +98,9 @@ class Model:
         :return: numero di componenti connesse
         """
         # TODO
+
+        num_cc = nx.number_connected_components(self.G)
+        return num_cc
 
     def get_reachable(self, start):
         """

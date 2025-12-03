@@ -35,6 +35,7 @@ class Controller:
 
         for n in self._model.get_nodes():
             # n è un oggetto rifugio; usiamo .nome come rappresentazione
+            print(n)
             grado = self._model.get_num_neighbors(n)
             self._view.lista_visualizzazione.controls.append(ft.Text(f"{n} -- {grado} vicini."))
 
