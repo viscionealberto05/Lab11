@@ -54,6 +54,7 @@ class Controller:
             return
 
         raggiungibili = self._model.get_reachable(self._current_rifugio)
+
         self._view.lista_visualizzazione.controls.clear()
         self._view.lista_visualizzazione.controls.append(
             ft.Text(f"Da '{self._current_rifugio.nome}' è possibile raggiungere a piedi {len(raggiungibili)} rifugi:"))
