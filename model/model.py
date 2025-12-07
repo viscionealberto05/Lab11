@@ -15,14 +15,15 @@ class Model:
         """
 
         self.lista_nodi = DAO.getRifugi()
-        print(self.lista_nodi)
+        #print(self.lista_nodi)
 
         self.G.add_nodes_from(self.lista_nodi)  # attenzione a capire cosa fa
-        for node in self.G.nodes:
-            print(node)
 
+        #for node in self.G.nodes:
+        #    print(node)
 
         self.lista_sentieri = DAO.getSentieri(year)
+
         for sentiero in self.lista_sentieri:
             self.G.add_edge(sentiero.id_rifugio1, sentiero.id_rifugio2)
 
@@ -41,50 +42,16 @@ class Model:
         :param node: un rifugio (cioè un nodo del grafo)
         :return: numero di vicini diretti del nodo indicato
         """
-        # TODO
 
         nodi_vicini = []
 
         #assegno al nodo dato in input dall'utente come intero un effettivo oggetto rifugio, che è un nodo
-        """for oggetto_nodo in self.G.nodes:
-            if oggetto_nodo.id == node:
-                node = oggetto_nodo
-                break
 
-        for edge in self.G.edges(node):
-            #print(edge[1])
-
-            #assegno al potenziale nodo vicino che sto cercando (cioè edge[1]) un effettivo oggetto rifugio
-            #cosi da poi poter effettuare il controllo sfruttando la sintassi corretta del metodo __eq__ di rifugio
-            for oggetto_nodo in self.G.nodes:
-                if oggetto_nodo.id == edge[1]:
-                    potenziale_nodo_vicino = oggetto_nodo
-                    break
-
-
-            for nodo in self.G.nodes:
-                #print(nodo)
-                #print(edge)
-                #if nodo.id == edge[1].id:
-                if nodo.id == potenziale_nodo_vicino:
-                    nodi_vicini.append(potenziale_nodo_vicino)
-
-        for element in nodi_vicini:
-            print(element)
-
-        return len(nodi_vicini)"""
-
+        #assegno al potenziale nodo vicino che sto cercando (cioè edge[1]) un effettivo oggetto rifugio
+        #cosi da poi poter effettuare il controllo sfruttando la sintassi corretta del metodo __eq__ di rifugio
 
         for edge in self.G.edges(node):
             for nodo in self.G.nodes:
-
-                """for nodo_pot in self.G.nodes:
-                    # print(nodo)
-                    # print(edge)
-                    # if nodo.id == edge[1].id:
-                    if nodo_pot.id == edge[1]:
-                        nodo_vicino = nodo_pot
-                        break"""
 
                 nodo_vicino = self.associa_id_a_nodo(edge[1])
 
@@ -94,6 +61,13 @@ class Model:
         return len(nodi_vicini)
 
     def associa_id_a_nodo(self,id):
+
+        """Creo una funzione che associa al singolo id del rifugio un effettivo
+        oggetto rifugio, scelgo di implementare tale funzione in python perchè la
+        query sql sulle connessioni (sentieri) è costruita mediante un join sulle due
+        relazioni, altrimenti avrei potuto ottenere subito tutti i dati necessari"""
+
+
         for nodo_pot in self.G.nodes:
             if nodo_pot.id == id:
                 nodo_vicino = nodo_pot
@@ -106,7 +80,6 @@ class Model:
         Restituisce il numero di componenti connesse del grafo.
         :return: numero di componenti connesse
         """
-        # TODO
 
         num_cc = nx.number_connected_components(self.G)
         return num_cc
@@ -129,8 +102,6 @@ class Model:
         return a
         """
 
-        # TODO
-
         """Tecnica 1 - Metodi NetworkX: `dfs_tree()`, `bfs_tree()`"""
 
         #start è inteso come vertice, cioè un oggetto di tipo rifugio che è un nodo
@@ -152,22 +123,22 @@ class Model:
 
         self.nodi_visitati = []
 
-        #archi_start = self.G.edges(start)
-
         self.get_reachable_recursive_DFS(start,self.nodi_visitati)
 
-        """for arco in archi_start:
-            nodo_collegato = self.associa_id_a_nodo(arco[1])
-            if nodo_collegato in nodi_visitati:
-                pass
-            else:
-                nodi_visitati.append(nodo_collegato)"""
+        #Dopo aver eseguito la funzione ricorsiva mi assicuro che il nodo di partenza non sia
+        #visualizzato come raggiungibile a partire da se stesso:
 
+        if start in self.nodi_visitati:
+            self.nodi_visitati.remove(start)
 
         return self.nodi_visitati
 
 
     def get_reachable_recursive_DFS(self,start,nodi_visti):
+
+        """Implementazione dell'algoritmo ricorsivo adattato dalle slide per il Depth First Visit
+        dunque sceglo un nodo e da questo ne seleziono uno vicino, faccio lo stesso per quest'ultimo e così via fino
+        a che non esaurisco i nodi di un particolare ramo e torno indietro a cercarne altri"""
 
         archi_start = self.G.edges(start)
 
